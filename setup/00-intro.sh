@@ -42,7 +42,7 @@ rm -f .env
 # Control Plane Cluster #
 #########################
 
-kind create cluster --config kind.yaml
+# kind create cluster --config kind.yaml
 
 kubectl apply \
     --filename https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
@@ -69,8 +69,8 @@ kubectl apply --filename providers/dot-sql.yaml
 
 kubectl apply --filename providers/dot-app.yaml
 
-gum spin --spinner dot \
-    --title "Waiting for Crossplane providers..." -- sleep 60
+# gum spin --spinner dot \
+#     --title "Waiting for Crossplane providers..." -- sleep 60
 
 kubectl wait --for=condition=healthy provider.pkg.crossplane.io \
     --all --timeout=1800s
@@ -163,13 +163,10 @@ aws_secret_access_key = $AWS_SECRET_ACCESS_KEY
 
 else
 
-    AZURE_TENANT_ID=$(gum input --placeholder "Azure Tenant ID" --value "$AZURE_TENANT_ID")
-
-    az login --tenant $AZURE_TENANT_ID
-
-    export SUBSCRIPTION_ID=$(az account show --query id -o tsv)
-
-    az ad sp create-for-rbac --sdk-auth --role Owner --scopes /subscriptions/$SUBSCRIPTION_ID | tee azure-creds.json
+    # AZURE_TENANT_ID=$(gum input --placeholder "Azure Tenant ID" --value "$AZURE_TENANT_ID")
+    # az login --tenant $AZURE_TENANT_ID
+    # export SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+    # az ad sp create-for-rbac --sdk-auth --role Owner --scopes /subscriptions/$SUBSCRIPTION_ID | tee azure-creds.json
 
     kubectl --namespace crossplane-system create secret generic azure-creds --from-file creds=./azure-creds.json
 
